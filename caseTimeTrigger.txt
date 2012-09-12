@@ -1,0 +1,63 @@
+trigger CaseTimeTrigger on Case (after insert) {
+    DateTime CreatedDate = System.now(); 
+    Integer CreatedDay = caseTime.getCaseDay(CreatedDate); 
+    Integer CreatedTime = caseTime.getCaseTime(CreatedDate);  
+    String isHoliday = caseTime.isHoliday(CreatedDate); 
+    
+    for(Case caseIds : [SELECT id FROM Case WHERE id IN :Trigger.new]){
+        LIST<Case> c = [SELECT id,Created_On_Holiday__c,Created_In_Business_Hours__c, Apex_Time__c,myTest__c, Apex_Test_2__c,  CreatedDate FROM Case WHERE id IN :Trigger.new]; 
+        //Case is created within business hours on a business day
+        if(CreatedTime >= 8  && CreatedTime < 17 && CreatedDay >= 1 && CreatedDay < 6 && isHoliday == 'False'){
+            c[0].Apex_Time__c = System.now(); 
+            c[0].Created_In_Business_Hours__c = false; 
+        }
+        //Weekday created before business hours, including Friday
+        else if(CreatedTime >= 0 && CreatedTime < 8 && CreatedDay >= 1 && CreatedDay < 6 && isHoliday == 'False'){
+            DateTime CreatedDateTime = CaseTime.newDays(0); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+        }
+        //Weekday created after business hours, excludes Friday
+        else if(CreatedTime > 17 && CreatedDay >= 1 && CreatedDay < 5 && isHoliday == 'False'){
+            DateTime CreatedDateTime = caseTime.newDays(1); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+        }
+        //Friday after business hours
+        else if(CreatedDay == 5 && CreatedTime > 17 && isHoliday == 'False'){
+            DateTime CreatedDateTime = CaseTime.newDays(3); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+        }
+        //Saturday
+        else if(CreatedDay == 6 && isHoliday == 'False'){
+            DateTime CreatedDateTime = CaseTime.newDays(2); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+        }
+        //Sunday
+        else if(CreatedDay == 0 && isHoliday == 'False'){
+           DateTime CreatedDateTime = CaseTime.newDays(1); 
+            c[0].Apex_Time__c = CreatedDateTime;            
+        }
+        //Created on holiday, not friday
+        else if(isHoliday == 'True' && CreatedDay >= 1 && CreatedDay < 5){
+            DateTime CreatedDateTime = CaseTime.newDays(1); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+            c[0].Created_On_Holiday__c = true; 
+        }
+        else if(isHoliday == 'True' && CreatedDay == 5){
+            DateTime CreatedDateTime = CaseTime.newDays(3); 
+            c[0].Apex_Time__c = CreatedDateTime;
+            c[0].Created_On_Holiday__c = true; 
+        }
+        else if(isHoliday == 'True' && CreatedDay == 6){
+            DateTime CreatedDateTime = CaseTime.newDays(2); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+            c[0].Created_On_Holiday__c = true; 
+        }
+        else if(isHoliday == 'True' && CreatedDay == 0){
+            DateTime CreatedDateTime = CaseTime.newDays(1); 
+            c[0].Apex_Time__c = CreatedDateTime; 
+            c[0].Created_On_Holiday__c = true; 
+        }
+         update c;    
+    }
+    
+}

@@ -1,0 +1,259 @@
+public with sharing class caseTimeUtility {
+    
+    public static Integer getCaseDay(DateTime CreatedDate){
+         CreatedDate = System.now();
+         Date myDate =  date.newInstance(createdDate.year(),createdDate.month(),createdDate.day());
+         Date weekStart = myDate.toStartofWeek();//Calculates start of week 
+         Integer dayOfWeek = weekStart.daysBetween(myDate);//Uses start of week and day in week to calculate weekday
+         Integer CreatedDay = dayOfWeek; 
+         return CreatedDay; 
+    }
+    
+    public static Integer getCasetime(DateTime CreatedDate){
+        CreatedDate = System.now(); 
+        String createdSTime = CreatedDate.format('k');// hour of created date 0-23
+        Integer createdTime = integer.valueof(createdSTime); 
+        return createdTime; 
+    }
+    
+    //method to set created time to 8:00 when out of business hours and add days
+    public static DateTime newDays(Integer numDays){
+        DateTime tempCreatedDateTime = System.now(); 
+        Date tempCreatedDate = System.today(); 
+        Date CreatedDate = tempCreatedDate.addDays(numDays); 
+        Integer setMonth = CreatedDate.month(); 
+        Integer setDay = CreatedDate.day(); 
+        Integer setYear = CreatedDate.year(); 
+        DateTime CreatedDateTime = DateTime.newInstance(setYear,setMonth,setDay,8,0,0); 
+        return CreatedDateTime; 
+    }
+    
+    private static Date getMLKday(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempJanfirst = date.newInstance(tempYear,1,1); 
+        Date weekStart = tempJanfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempJanfirst); 
+        Date mlkDay; 
+        if(weekday == 3){
+            mlkDay = date.newInstance(tempYear,1,20); 
+        }
+        else if(weekday == 4){
+            mlkDay = date.newInstance(tempYear,1,19); 
+        } 
+        else if(weekday == 5){
+            mlkDay = date.newInstance(tempYear,1,18); 
+        }
+        else if(weekday == 0){
+            mlkDay = date.newInstance(tempYear,1,16); 
+        }
+        else if(weekday == 1){
+            mlkDay = date.newInstance(tempYear,1,15); 
+        }
+        else if(weekday == 2){
+            mlkDay = date.newInstance(tempYear,1,21);
+        }
+        else if(weekday == 6){
+            mlkDay = date.newInstance(tempYear,1,17); 
+        }
+        return mlkDay; 
+    }
+    
+    private static Date getPresDay(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempFebfirst = date.newInstance(tempYear,2,1); 
+        Date weekStart = tempFebfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempFebfirst); 
+        Date presDay;
+        if(weekday == 5){
+            presDay = date.newInstance(tempYear,2,18); 
+        }
+        else if(weekday == 1){
+            presDay = date.newInstance(tempYear,2,15); 
+        }
+        else if(weekday == 2){
+            presDay = date.newInstance(tempYear,2,21); 
+        }
+        else if(weekday == 3){
+            presDay = date.newInstance(tempYear,2,20); 
+        }   
+        else if(weekday == 6){
+            presDay = date.newInstance(tempYear,2,17);
+        }
+        else if(weekday == 0){
+            presDay = date.newInstance(tempYear,2,16); 
+        }
+        else if(weekday == 4){
+            presDay = date.newInstance(tempYear,2,19); 
+        }
+        return presDay; 
+    }
+    private static Date getMemorialDay(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempMayfirst = date.newInstance(tempYear,5,1); 
+        Date weekStart = tempMayfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempMayfirst); 
+        Date memorialDay;
+        if(weekday == 2){
+            memorialDay = date.newInstance(tempYear,5,28); 
+        }
+        else if(weekday == 3){
+            memorialDay = date.newInstance(tempYear,5,27); 
+        }
+        else if(weekday == 4){
+            memorialDay = date.newInstance(tempYear,5,26); 
+        }
+        else if(weekday == 5){
+            memorialDay = date.newInstance(tempYear,5,25); 
+        }
+        else if(weekday == 6){
+            memorialDay = date.newInstance(tempYear,5,31); 
+        }
+        else if(weekday == 0){
+            memorialDay = date.newInstance(tempYear,5,30); 
+        }
+        else if(weekday == 1){
+            memorialDay = date.newInstance(tempYear,5,29); 
+        }
+        return memorialDay; 
+    }
+    private static Date getLaborDay(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempSepfirst = date.newInstance(tempYear,9,1); 
+        Date weekStart = tempSepfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempSepfirst); 
+        Date laborDay;
+        if(weekday == 6){
+            laborDay = date.newInstance(tempYear,9,3);
+        }
+        else if(weekday == 4){
+            laborDay = date.newInstance(tempYear,9,5);
+        }
+        else if(weekday == 3){
+            laborDay = date.newInstance(tempYear,9,6); 
+        }
+        else if(weekday == 2){
+            laborDay = date.newInstance(tempYear,9,7); 
+        }
+        else if(weekday == 1){
+            laborDay = date.newInstance(tempYear,9,1); 
+        }
+        else if(weekday == 0){
+            laborDay = date.newInstance(tempYear,9,4);
+        }
+        return laborDay;
+    }
+    private static Date getTDay(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempNovfirst = date.newInstance(tempYear,10,1); 
+        Date weekStart = tempNovfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempNovfirst); 
+        Date tDay;
+        if(weekday == 4){
+            tDay = date.newInstance(tempYear,11,22); 
+        }
+        else if(weekday == 5){
+            tDay = date.newInstance(tempYear,11,28); 
+        }
+        else if(weekday == 0){
+            tDay = date.newInstance(tempYear,11,26); 
+        }
+        else if(weekday == 1){
+            tDay = date.newInstance(tempYear,11,25); 
+        }
+        else if(weekday == 2){
+            tDay = date.newInstance(tempYear,11,24); 
+        }
+        else if(weekday == 3){
+            tDay = date.newInstance(tempYear,11,23); 
+        }
+        else if(weekday == 6){
+            tDay = date.newInstance(tempYear,11,27); 
+        }
+        return tDay; 
+    }
+    private static Date getColDay(DateTime CreatedDate){
+        Integer tempYear = CreatedDate.year(); 
+        Date tempOctfirst = date.newInstance(tempYear,10,1); 
+        Date weekStart = tempOctfirst.toStartofWeek(); 
+        Integer weekday = weekStart.daysBetween(tempOctfirst); 
+        Date colDay;
+        if(weekday == 1){
+            colDay = date.newInstance(tempYear,10,8);
+        }
+        else if(weekday == 2){
+            colDay = date.newInstance(tempYear,10,14); 
+        }
+        else if(weekday == 3){
+            colDay = date.newInstance(tempYear,10,13); 
+        }
+        else if(weekday == 4){
+            colDay = date.newInstance(tempYear,10,12); 
+        }
+        else if(weekday == 5){
+            colDay = date.newInstance(tempYear,10,11); 
+        }
+        else if(weekday == 6){
+            colDay = date.newInstance(tempYear,10,10); 
+        }
+        else if(weekday == 0){
+            colDay = date.newInstance(tempYear,10,9); 
+        }
+        return colDay; 
+    }
+    public static String isHoliday(DateTime tempCreatedDate){
+        Date CreatedDate = date.newInstance(tempCreatedDate.year(),tempCreatedDate.month(),tempCreatedDate.day()); 
+        Integer tempMonth = tempCreatedDate.month(); 
+        Integer tempDay = tempCreatedDate.day(); 
+        String isHoliday;
+        Date mlkDay = CaseTime.getMLKday(CreatedDate);  
+        Date presDay = CaseTime.getPresday(CreatedDate);
+        Date memorialDay = CaseTime.getMemorialDay(CreatedDate); 
+        Date laborDay = CaseTime.getLaborDay(CreatedDate);
+        Date colDay = CaseTime.getColDay(CreatedDate); 
+        Date tDay = CaseTime.getTDay(CreatedDate); 
+        //Christmas
+        if(tempMonth == 12 && tempDay == 25){
+             isHoliday = 'True'; 
+        }
+        //New Years Day
+        else if(tempMonth == 1 && tempDay == 1){
+            isHoliday = 'True'; 
+        }
+        //Martin Luther King Day
+        else if(CreatedDate == mlkDay){
+            isHoliday = 'True'; 
+        }
+        //President's Day
+        else if(CreatedDate == presDay){
+            isHoliday = 'True';
+        }
+       //Memorial Day
+       else if(CreatedDate == memorialDay){
+            isHoliday = 'True'; 
+        }
+        //Labor Day
+        else if(CreatedDate == laborDay){
+            isHoliday = 'True';
+        }    
+        //July 4th
+        else if(tempMonth == 7 && tempDay == 4){
+            isHoliday = 'True'; 
+        }
+        //Columbus Day
+        else if(CreatedDate == colDay){
+            isHoliday = 'True'; 
+        }
+        //Veteran's Day
+        else if(tempMonth == 11 && tempDay == 11){
+            isHoliday = 'True'; 
+        }
+        //Thanksgiving 
+        else if(CreatedDate == tDay){
+            isHoliday = 'True'; 
+        }
+        else{
+            isHoliday = 'False'; 
+        }
+        return isHoliday; 
+    }
+}
